@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <title>Designer | FashionHub</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    
+        <script src="{% static 'scripts/main.js' %}"></script>
+    </head>
+
+    <body >
+        <nav class="navbar is-dark">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item"><strong>FashionHub</strong></a>
+        
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="main-navbar">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+        
+            <div class="navbar-menu" id="main-navbar">
+                <div class="navbar-start">
+                    <div class="navbar-item">
+                        <form method="post" action="{% url 'search' %}">
+                            {% csrf_token %}
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input type="text" class="input" placeholder="Search..." name="query">
+                                </div>
+                                <div class="control">
+                                    <button class="button is-dark is-uppercase">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="navbar-end">
+                    <a href="{% url 'designers' %}" class="navbar-item">Designers</a>
+                    <a href="{% url 'contact' %}" class="navbar-item">Contact</a>
+
+                   {% if request.user.is_authenticated %}
+                   <a href="{% url 'logout' %}" class="navbar-item">logout</a>
+                   <a href="{% url 'designer_admin' %}" class="navbar-item">{{user.first_name}}</a>
+                   {% else %}
+                    <a href="{% url 'designer_register' %}" class="navbar-item">SignUp</a>
+                    <a href="{% url 'login' %}" class="navbar-item">SignIn</a>
+                    {% endif %}
+                    
+                    
+                   
+                </div>
+            </div>
+        </nav>
+        <div >
+        <section class="section" >
+            <div class="container">
+                <img src="https://media.weddingsonly.in/blogger/285344f0a8d3daa65ebe1b72cbe75b4e/34d02c7c5d90464bb52d_sabyasachi-banner.jpg" alt="">
+            </div>
+        </section></div>
+        <footer class="footer">
+            <h3 class="is-size-4 mb-4">FashionHub</h3>
+            
+            {% if request.user.is_designer.is_authenticated %}
+                <a href="{% url 'designer_admin' %}">Designer admin</a>
+            {% else %}
+                <a href="{% url 'become_designer' %}">Designer Portal</a>
+            {% endif %}
+                <br>
+            
+        </footer>
+
+        {% block scripts %}
+            
+        {% endblock %}
+    </body>
+</html>

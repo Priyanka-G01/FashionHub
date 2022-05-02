@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Designers | {% endblock %}
+
+{% block content %}
+    <h1 class="title">Designers</h1>
+
+    <div class="columns is-multiline">
+        {% for d in designers %}
+       
+            <div class="column is-3">
+                <div class="box">
+                    <h2 class="subtitle">{{ d.name }}</h2>
+
+                    <hr>
+
+                    <a href="{% url 'designer' d.id %}" class="button is-dark is-uppercase">View</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

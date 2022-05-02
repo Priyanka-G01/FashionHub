@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <title>{% block title %}{% endblock %}FashionHub</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    
+        <script src="{% static 'scripts/main.js' %}"></script>
+
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans&display=swap'>
+        <style>
+
+body{background-color: #eeeeee;font-family: 'Open Sans',serif}.container{margin-top:50px;margin-bottom: 50px}.card{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0, 0, 0, 0.1);border-radius: 0.10rem}.card-header:first-child{border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0}.card-header{padding: 0.75rem 1.25rem;margin-bottom: 0;background-color: #fff;border-bottom: 1px solid rgba(0, 0, 0, 0.1)}.track{position: relative;background-color: #ddd;height: 7px;display: -webkit-box;display: -ms-flexbox;display: flex;margin-bottom: 60px;margin-top: 50px}.track .step{-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;width: 25%;margin-top: -18px;text-align: center;position: relative}.track .step.active:before{background: #FF5722}.track .step::before{height: 7px;position: absolute;content: "";width: 100%;left: 0;top: 18px}.track .step.active .icon{background: #ee5435;color: #fff}.track .icon{display: inline-block;width: 40px;height: 40px;line-height: 40px;position: relative;border-radius: 100%;background: #ddd}.track .step.active .text{font-weight: 400;color: #000}.track .text{display: block;margin-top: 7px}.itemside{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;width: 100%}.itemside .aside{position: relative;-ms-flex-negative: 0;flex-shrink: 0}.img-sm{width: 80px;height: 80px;padding: 7px}ul.row, ul.row-sm{list-style: none;padding: 0}.itemside .info{padding-left: 15px;padding-right: 7px}.itemside .title{display: block;margin-bottom: 5px;color: #212529}p{margin-top: 0;margin-bottom: 1rem}.btn-warning{color: #ffffff;background-color: #ee5435;border-color: #ee5435;border-radius: 1px}.btn-warning:hover{color: #ffffff;background-color: #ff2b00;border-color: #ff2b00;border-radius: 1px}
+
+            label{
+  color: #000;
+	font-size: 1.3em;
+ 
+	display: block;
+	
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+
+input{
+  width: 40%;
+	height: 40px;
+	background: #e0dede;
+	justify-content: center;
+	display: flex;
+	margin-left: 30px;
+	padding: 10px;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+}
+.btn:hover{
+	background: #6d44b8;
+}
+
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar is-dark">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item"><strong>FashionHub</strong></a>
+        
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="main-navbar">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+        
+            <div class="navbar-menu" id="main-navbar">
+                <div class="navbar-start">
+                    <div class="navbar-item">
+                        <form method="post" action="{% url 'search' %}">
+                            {% csrf_token %}
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input type="text" class="input" placeholder="Search..." name="query">
+                                </div>
+                                <div class="control">
+                                    <button class="button is-dark is-uppercase">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="navbar-end">
+                    <a href="{% url 'designers' %}" class="navbar-item">Designers</a>
+                    <a href="{% url 'contact' %}" class="navbar-item">Contact</a>
+
+                   {% if request.user.is_authenticated %}
+                   <a href="{% url 'logout' %}" class="navbar-item">logout</a>
+                   {% else %}
+                    <a href="{% url 'customer_register' %}" class="navbar-item">SignUp</a>
+                    <a href="{% url 'login' %}" class="navbar-item">SignIn</a>
+                    {% endif %}
+                    
+                    <div class="navbar-item">
+                        <a href="{% url 'cart' %}" class="button is-dark">Cart{% if cart %} ({{ cart|length }}){% endif %}</a>
+                    </div>
+                   
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar is-dark" style="border-top: 1px solid white;">
+            <div class="navbar-start">
+                {% for category in menu_categories %}
+                    <a href="{% url 'category' category.slug %}" class="navbar-item">{{category.title}}</a>
+                {% endfor %}
+            </div>
+        </nav>
+        <section class="section">
+            <div class="container">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </section>
+        <footer class="footer">
+            <h3 class="is-size-4 mb-4">FashionHub</h3>
+            
+            {% if request.user.is_designer.is_authenticated %}
+                <a href="{% url 'designer_admin' %}">Designer admin</a>
+            {% else %}
+                <a href="{% url 'become_designer' %}">Designer Portal</a>
+            {% endif %}
+                <br>
+            
+        </footer>
+
+        {% block scripts %}
+            
+        {% endblock %}
+    </body>
+</html>

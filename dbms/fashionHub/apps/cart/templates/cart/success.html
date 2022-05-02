@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Success | {% endblock %}
+
+{% block content %}
+    <h1 class="title">Thanks for the order</h1>
+
+    <h2>Order Details</h2>
+    <p>Order Confirmation mail has been sent.</p>
+    <a href="{% url 'customer_det' %}" class="button is-dark is-uppercase">View</a><br>
+    <p>Keep track of your order</p>
+    <a href="{% url 'track' %}" class="button is-dark is-uppercase">Track</a>
+{% endblock %}
